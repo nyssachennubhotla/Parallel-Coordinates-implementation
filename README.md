@@ -1,9 +1,7 @@
-# CS 360 Homework
 
-The GitHub Pages website associated with your homework repository will be available at:
+The GitHub Pages website associated with my visualization:
 
 ```
-https://usf-cs360-2017.github.io/homework#-username
+https://usf-cs360-2017.github.io/homework2-nyssachennubhotla
 ```
 
-Replace `#` with the homework number and `username` with your **Github** username. This is the link you should submit in Canvas.
