@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="assets/ico/favicon.ico">
+
+    <title>Homework2 - Data Visualization</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="style.css" rel="stylesheet">
+    <link href="font-awesome.min.css" rel="stylesheet">
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <!-- Static navbar -->
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+         <!--  <a class="navbar-brand" href="index.html">INSTANT</a> -->
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="active"><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Me</a></li>
+            <!-- <li><a href="#works">Works</a></li> -->
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+
+	<div id="workwrap">
+	    <div class="container text-center">
+			<div class="row">
+				<div class="col-lg-5 col-lg-offset-3">
+					<p
+						text-align; center;>
+						<h4>WELCOME PEOPLE,</h4>
+					</p>
+					<p
+						text-align; center;>
+						<h1>Parallel coordinates
+						implementation</h1>
+					</p>
+					<h4>Created by Nyssa Chennubhotla</h4>
+				</div>
+			</div><! --/row -->
+	    </div> <!-- /container -->
+	</div><! --/workwrap -->
+
+	<section id="works"></section>
+	<div class="container">
+		<div class="row centered mt mb">
+			<div class="col-lg-8 col-lg-offset-2">
+				<h4>ABOUT THE GRAPH</h4>
+				<p>This visualization is based on colleges in California. The colleges are grouped by 3 major categories, Private colleges(including Stanford), Public, and NA. The NA category includes for profit schools, 2 year community college, and beauty/technician schools. Axes included in this graph are female count, parents average income, parents in the 1st and 5th quintile(bottom/top quintile), parents in the top most quintile. In addition, kids average income, kids in bottom quintile, and kids in the top most quintle are also displayed in this graph to compare/contrast with their parents income.</p>
+			</div>
+			<div class="col-lg-10 col-lg-offset-1 mt">
+				<h2>RAW prototype</h2>
+				<img src="fuckme.png"  height="400" width="800"></img>
+				<br>
+
+			</div>
+
+		</div><! --row -->
+	</div><! --/container -->
+	<body>
+	 <section id="contact" class="content-section text-center">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+            	<script src="https://d3js.org/d3.v3.min.js"></script>
+                <h2>Implementation</h2>
+                <p>Drag along the axis to highlight specific lines.</p>
+                <div class="row centered">
+				<div class="col-lg-4">
+					<p
+						style = "color:#FF98DA;">
+						<span> Private</span>
+					</p>
+				</div>
+
+				<div class="col-lg-4">
+					<p
+						style = "color:#C1EA9F;">
+						<span> Public</span>
+					</p>
+				</div>
+				<div class="col-lg-4">
+					<p
+						style = "color:#51DACF;">
+						<span> NA</span>
+					</p>
+				</div>
+
+			</div>
+
+
+                <!DOCTYPE html>
+                    <meta charset="utf-8">
+                    <style>
+
+                    svg {
+
+                    	display: block;
+   						margin: auto;
+                    		background-color: white;
+	                      font: 10px sans-serif;
+	                      text-align=center;
+
+                    }
+
+
+                    .background path {
+                      fill: white;
+                      stroke: #ddd;
+                      shape-rendering: crispEdges;
+                    }
+
+                    .foreground path {
+                      fill: none;
+
+
+                    }
+
+                    .brush .extent {
+                      fill-opacity: .3;
+                      stroke: #fff;
+                      shape-rendering: crispEdges;
+                    }
+
+                    .axis line,
+                    .axis path {
+                      fill: none;
+                      stroke: #000;
+                      shape-rendering: crispEdges;
+                    }
+
+                    .axis text {
+                      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+                    }
+
+                    </style>
+                   <!--  <svg width="900" height="500"></svg> -->
+
+		               <script>
+		                var margin = {top: 30, right: 10, bottom: 10, left: 10},
+		                    width = 960 - margin.left - margin.right,
+		                    height = 500 - margin.top - margin.bottom
+
+		                var x = d3.scale.ordinal().rangePoints([0, width], 1),
+		                    y = {};
+
+		                var line = d3.svg.line(),
+		                    axis = d3.svg.axis().orient("left"),
+		                    background,
+		                    foreground;
+
+		                //var svg = d3.select("body").append("svg")
+		                var svg = d3.select("svg#demo1");
+		                   svg = d3.select("body").append("svg")
+		                    .attr("width", width + margin.left + margin.right)
+		                    .attr("height", height + margin.top + margin.bottom)
+		                    .append("g")
+		                    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+
+		                d3.csv("collegev2.csv", function(error, collegev2) {
+
+		                  // Extract the list of dimensions and create a scale for each.
+		                  x.domain(dimensions = d3.keys(collegev2[0]).filter(function(d) {
+
+		                    return d != "name" && d != "tier_name" && d != "type" && d != "Private_or_public"  && d != "state" && d != "tier" && (y[d] = d3.scale.linear()
+		                        .domain(d3.extent(collegev2, function(p) { return +p[d]; }))
+		                        .range([height, 0]));
+		                  }));
+
+		                var color = d3.scale.ordinal()
+		                  .domain([1,2,3])
+		                  .range(['#51DACF','#FF98DA', '#C1EA9F']);
+
+		                  // Add blue foreground lines for focus.
+		                  foreground = svg.append("g")
+		                      .attr("class", "foreground")
+		                    .selectAll("path")
+		                      .data(collegev2)
+		                    .enter().append("path")
+		                      .attr("d", path)
+		                      .attr('stroke',function(d) { return color(d.Private_or_public); });
+
+
+		                  // Add a group element for each dimension.
+		                  var g = svg.selectAll(".dimension")
+		                      .data(dimensions)
+		                    .enter().append("g")
+		                      .attr("class", "dimension")
+		                      .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
+
+		                  // Add an axis and title.
+		                  g.append("g")
+		                      .attr("class", "axis")
+		                      .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
+		                    .append("text")
+		                      .style("text-anchor", "middle")
+		                      .attr("y", -9)
+		                      .text(function(d) { return d; });
+
+		                  // Add and store a brush for each axis.
+		                  g.append("g")
+		                      .attr("class", "brush")
+		                      .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
+		                    .selectAll("rect")
+		                      .attr("x", -8)
+		                      .attr("width", 16);
+		                });
+
+		                // Returns the path for a given data point.
+		                function path(d) {
+		                  return line(dimensions.map(function(p) {
+		                    return [x(p), y[p](d[p])];
+		                  }));
+
+		                }
+
+
+		                // Handles a brush event, toggling the display of foreground lines.
+		                function brush() {
+		                  var actives = dimensions.filter(function(p) { return !y[p].brush.empty(); }),
+		                      extents = actives.map(function(p) { return y[p].brush.extent(); });
+		                  foreground.style("display", function(d) {
+		                    return actives.every(function(p, i) {
+		                      return extents[i][0] <= d[p] && d[p] <= extents[i][1];
+		                    }) ? null : "none";
+		                  });
+		                }
+
+                </script>
+
+            </div>
+
+        </div>
+    </section>
+
+	<section id="works"></section>
+	<div class="container">
+		<div class="row centered mt mb">
+			<div class="col-lg-8 col-lg-offset-2">
+				<h4>CONCLUDING FROM THE GRAPH</h4>
+				<p>Some interesting insights I found through the graph are that students attending schools that belong to the NA category(2 year schools, beauty schools, technical schools) come from families in q1(the lowest quintile) and are also in the topq1 category after attending these schools. The population of female students in this category also seems to be the highest after all female schools in California(after Mills college and Scripps College). Additionally, female count in private schools also seems to be higher than public schools. We can also notice that parents in the 5th quintile(highest income) seem to be the ones with children in private schools while these same kids can be seen with low average income. Dragging along the y-axis for kids average income(from top to bottom) we can also notice that these high income colleges seem to also have a very low female count. From this we can conclude that mobility rates for students is not very high and going to a four year school is no longer the solution to the American Dream. </p>
+			</div>
+
+		</div><! --/row -->
+	</div><! --/container -->
+
+	<div id="social">
+		<div class="container">
+			<div class="row centered">
+				<div class="col-lg-15">
+					<p>The Equality of Opportunity project is focused on documenting and questioning whether the American Dream is still possible. With this data, these economits documented the wide variation
+						in economic mobility across the nation. The reseachers focused on four major results: access, outcomes, mobility rates, and trends.
+
+					</p>
+					   <p>
+           Dataset used can be found
+            <a href="http://www.equality-of-opportunity.org/data/">here</a>.
+        </p>
+				</div>
+
+
+			</div><! --/row -->
+		</div><! --/container -->
+	</div><! --/social -->
+
+	<div id="footerwrap">
+		<div class="container">
+			<div class="row centered">
+				<div class="col-lg-4">
+					<p><b>FEMALE/STUDENT/ASPIRING SOFTWARE ENGINEER</b></p>0
+				</div>
+
+				<div class="col-lg-4">
+					<p>Living in the amazing sf.</p>
+				</div>
+				<div class="col-lg-4">
+					<p>1-800-callme</p>
+				</div>
+
+			</div>
+
+		</div>
+	</div><! --/footerwrap -->
+</body>
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+  </body>
+</html>
